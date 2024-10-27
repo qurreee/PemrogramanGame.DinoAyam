@@ -12,7 +12,7 @@ Kelompok 8 \- Mewing Studio
 - Mochamad Bintang Tegar 	225150201111052
 
 [Link Github](https://github.com/qurreee/PemrogramanGame.DinoAyam)
-
+[Link Youtube](https://www.youtube.com/watch?v=N5SrfkFFxig)
 
 ## **Langkah pembuatan**
 
@@ -20,7 +20,7 @@ Kelompok 8 \- Mewing Studio
 
 Kita akan menyiapkan 3 File dengan 1 File ScreenManager dan 2 Screen. File yang Menjadi ScreenManager akan kita beri nama `DinoMain.cpp` dan 2 Screen yang kita butuhkan adalah `DinoGUI.cpp` untuk mengatur tampilan Main Menu dan `DinoDino.cpp` untuk mengatur Ingame utama. Kita juga akan membuat Class `Cactus` tersendiri untuk mempermudah rendering dan update banyak objek cactus sekaligus.
 
-[Gambar1]: https://github.com/qurreee/PemrogramanGame.DinoAyam/blob/master/PemGimImg/pemgimgraph.png "Gambar Graph"
+![Gambar1](https://github.com/qurreee/PemrogramanGame.DinoAyam/blob/master/PemGimImg/pemgimgraph.png "Gambar Graph")
 
 2. ### Pembuatan GUI Main menu
 
@@ -157,7 +157,7 @@ Kita akan melakukan inisialisasi untuk Objek `sprite` yaitu Sprite Character uta
 
 Inisialisasi suatu sprite dimulai dengan menyiapkan Texture yang sesuai, biasa berbentuk *Sprite Sheet*
 
-[Gambar2]:https://github.com/qurreee/PemrogramanGame.DinoAyam/blob/master/PemGimImg/Chicken.png "Chicken.png"
+![Gambar2](https://github.com/qurreee/PemrogramanGame.DinoAyam/blob/master/PemGimImg/Chicken.png "Chicken.png")
 
 Setelah itu kita akan Memasukkan Texture yang ada ke dalam Objek Sprite, dan mengatur berbagai atribut seperti `XNumFrames` dan `YNumFrames` yang membagi *SpriteSheet* yang kita punya menjadi kolom-kolom yang kemudian kita bisa gunakan ketika `AddAnimation`. Jangan lupa untuk mengatur Skala Sprite dan posisi awal mula Sprite.
 
