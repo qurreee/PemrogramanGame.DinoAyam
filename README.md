@@ -20,7 +20,7 @@ Kelompok 8 \- Mewing Studio
 
 Kita akan menyiapkan 3 File dengan 1 File ScreenManager dan 2 Screen. File yang Menjadi ScreenManager akan kita beri nama `DinoMain.cpp` dan 2 Screen yang kita butuhkan adalah `DinoGUI.cpp` untuk mengatur tampilan Main Menu dan `DinoDino.cpp` untuk mengatur Ingame utama. Kita juga akan membuat Class `Cactus` tersendiri untuk mempermudah rendering dan update banyak objek cactus sekaligus.
 
-gambar
+[Gambar1]: https://github.com/qurreee/PemrogramanGame.DinoAyam/blob/master/PemGimImg/pemgim%20graph.png "Gambar Graph"
 
 2. ### Pembuatan GUI Main menu
 
@@ -116,13 +116,48 @@ void Engine::DinoGUI::Update()
 ```
 3. ### Kelas Cactus.cpp
 
+Pada kelas ini berfungsi untuk mengatur objek dari sprite cactus seperti visualisasi dari cactus agar dapat menyesuaikan ukurannya dengan menggunakan fungsi  `SetScale`, lalu mengatur fungsi `SetBoundingBoxSize` untuk mengatur pembatas objek sprite agar dapat mendeteksi terjadinya tabrakan dengan sprite lain. Selanjutnya terdapat method update
+
+```cpp
+void Engine::Cactus::Update(float deltaTime)
+{
+    // Update logika kaktus di sini jika diperlukan
+    float cX = sprite->GetPosition().x;
+    float cY = sprite->GetPosition().y;
+
+    // Gerakkan kaktus ke kiri
+     // Kecepatan kaktus
+  
+    cX -= xVelocity * deltaTime;
+    sprite->SetPosition(cX, cY);
+   
+    
+
+    if (cX < 0)
+    {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> distrib(0, 3200); // Jarak minimal 100 pixel
+
+        int randomOffset = distrib(gen);
+        cX = 1600 + randomOffset;
+
+        xVelocity += 0.1f;// Respawn cactus at the right side of the screen
+    }
+
+    sprite->SetPosition(cX, cY);
+}
+```  
+   
+Method ini berfungsi untuk mengatur pergerakan cactus dari kanan ke kiri dengan memperbarui coordinate x dikurangi dengan `xVelocity*deltaTime`. Selain itu method ini juga akan mengatur perilaku cactus untuk memunculkan kembali objeknya ketika objek cactus sebelumnya sudah melewati batas tepi kiri layar dengan menggunakan fungsi random generator angka yang nantinya hasil dari angka tersebut akan ditambahkan pada coordinate x pada cactus sehingga objek cactus yang akan dimunculkan berada pada posisi yang berbeda-beda, pada saat cactus telah dimunculkan juga akan menambahkan kecepatan cactus tersebut. 
+
 4. ### Inisialisasi Ingame DinoDino.cpp
 
 Kita akan melakukan inisialisasi untuk Objek `sprite` yaitu Sprite Character utama yang akan kita kontrol ketika Game dijalankan. Setelah itu kita juga akan melakukan for loop untuk inisialisasi objek `cactus` dan menyimpannya di dalam vector `cacti`.
 
 Inisialisasi suatu sprite dimulai dengan menyiapkan Texture yang sesuai, biasa berbentuk *Sprite Sheet*
 
-Gambar
+[Gambar2]:https://github.com/qurreee/PemrogramanGame.DinoAyam/blob/master/PemGimImg/Chicken.png "Chicken.png"
 
 Setelah itu kita akan Memasukkan Texture yang ada ke dalam Objek Sprite, dan mengatur berbagai atribut seperti `XNumFrames` dan `YNumFrames` yang membagi *SpriteSheet* yang kita punya menjadi kolom-kolom yang kemudian kita bisa gunakan ketika `AddAnimation`. Jangan lupa untuk mengatur Skala Sprite dan posisi awal mula Sprite.
 
