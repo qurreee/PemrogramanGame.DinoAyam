@@ -350,7 +350,7 @@ void Engine::DinoDino::Draw()
 ```
 
 
-## **Langkah Clone**
+## **Langkah Clone**(blom bisa wak)
 1. Buka Terminal lalu ketik `vcpkg integrate install`
 2. Restart Visual Studio, Project -> Project Properties - > vcpkg -> Use vcpkg Manifest -> yes
 3. `vcpkg new --application`
