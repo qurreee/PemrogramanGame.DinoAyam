@@ -334,12 +334,16 @@ Maka score akan bertambah dan scoretime akan direset
    Setelah semuanya selesai jangan lupa menuliskan kode di fungsi Draw agar objek-objek yang telah kita buat dapat di Render ketika game berjalan  
      
 ```cpp
-  DrawLayer(backgrounds);
-  DrawLayer(middlegrounds);
-  DrawLayer(foregrounds);
-  sprite->Draw();
-  text->Draw();
-  for (Cactus* o : cacti) {
-  	o->Draw();
-  }
+void Engine::DinoDino::Draw()
+{
+	DrawLayer(backgrounds);
+	DrawLayer(middlegrounds);
+	DrawLayer(foregrounds);
+	sprite->Draw();
+	text->Draw();
+	for (Cactus* o : cacti) {
+		o->Draw();
+	}
+	
+}
 ```
