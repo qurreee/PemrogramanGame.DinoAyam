@@ -14,6 +14,7 @@ Kelompok 8 \- Mewing Studio
 [Link Github](https://github.com/qurreee/PemrogramanGame.DinoAyam)
 [Link Youtube](https://www.youtube.com/watch?v=N5SrfkFFxig)
 
+
 ## **Langkah pembuatan**
 
 1. ### Persiapan File
@@ -347,3 +348,15 @@ void Engine::DinoDino::Draw()
 	
 }
 ```
+
+
+## **Langkah Clone**
+1. Buka Terminal lalu ketik `vcpkg integrate install`
+2. Restart Visual Studio, Project -> Project Properties - > vcpkg -> Use vcpkg Manifest -> yes
+3. `vcpkg new --application`
+4. `vcpkg add port sdl`
+5. `vcpkg add port gl`
+6. `vcpkg add port ft2build`
+7. `vcpkg add port freetype`
+8. `vcpkg add port glm`
+9. Build Project
