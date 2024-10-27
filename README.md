@@ -20,7 +20,7 @@ Kelompok 8 \- Mewing Studio
 
 Kita akan menyiapkan 3 File dengan 1 File ScreenManager dan 2 Screen. File yang Menjadi ScreenManager akan kita beri nama `DinoMain.cpp` dan 2 Screen yang kita butuhkan adalah `DinoGUI.cpp` untuk mengatur tampilan Main Menu dan `DinoDino.cpp` untuk mengatur Ingame utama. Kita juga akan membuat Class `Cactus` tersendiri untuk mempermudah rendering dan update banyak objek cactus sekaligus.
 
-[Gambar1]: https://github.com/qurreee/PemrogramanGame.DinoAyam/blob/master/PemGimImg/pemgim%20graph.png "Gambar Graph"
+[Gambar1]: https://github.com/qurreee/PemrogramanGame.DinoAyam/blob/master/PemGimImg/pemgimgraph.png "Gambar Graph"
 
 2. ### Pembuatan GUI Main menu
 
