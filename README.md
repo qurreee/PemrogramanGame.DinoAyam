@@ -6,24 +6,161 @@ Kelompok 8 \- Mewing Studio
 
 **Anggota Kelompok**:
 
-- Faiqurrijal Tamhidy 225150200111041  
-- A  
-- Jeyhan Farrel Alfarisqi 225150207111082  
-- a
+- Faiqurrijal Tamhidy 	225150200111041  
+- Muhammad Fahly Fariza 	225150200111042
+- Jeyhan Farrel Alfarisqi 	225150207111082  
+- Mochamad Bintang Tegar 	225150201111052
 
 [Link Github](https://github.com/qurreee/PemrogramanGame.DinoAyam)
 
-(nulis kode kayaknya nanti gampang langsung di github, kalian kasi catatan mana kode yang harus dimasukin nanti ku masukin… kasih \`\`code\`\` biar keliatan )
 
 ## **Langkah pembuatan**
 
 1. ### Persiapan File
 
+Kita akan menyiapkan 3 File dengan 1 File ScreenManager dan 2 Screen. File yang Menjadi ScreenManager akan kita beri nama `DinoMain.cpp` dan 2 Screen yang kita butuhkan adalah `DinoGUI.cpp` untuk mengatur tampilan Main Menu dan `DinoDino.cpp` untuk mengatur Ingame utama. Kita juga akan membuat Class `Cactus` tersendiri untuk mempermudah rendering dan update banyak objek cactus sekaligus.
+
+gambar
+
 2. ### Pembuatan GUI Main menu
 
+Untuk GUI Main Menu yang kami gunakan, sebagian Besar masih mirip dengan File Tutorial yang diberikan oleh Dosen. GUI yang dibuat didalam File `DinoGUI.cpp` ini akan inisialisasi 1 Text untuk title dan 2 buah sprite Button.  Jangan lupa juga untuk menambahkan inputManager sehingga kita dapat melakukan aksi yang berkaitan. 
+
+```cpp
+void Engine::DinoGUI::Init()
+{
+	// Create a Texture
+	Texture* texture = new Texture("buttons.png");
+
+	// Create Sprites
+	Sprite* playSprite = (new Sprite(texture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))
+		->SetNumXFrames(6)->SetNumYFrames(1)->AddAnimation("normal", 5, 5)->AddAnimation("hover", 3, 4)
+		->AddAnimation("press", 3, 4)->SetAnimationDuration(400);
+
+	Sprite* exitSprite = (new Sprite(texture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))
+		->SetNumXFrames(6)->SetNumYFrames(1)->AddAnimation("normal", 2, 2)->AddAnimation("hover", 0, 1)
+		->AddAnimation("press", 0, 1)->SetAnimationDuration(400);
+
+	//Create Buttons
+	Button* playButton = new Button(playSprite, "play");
+	playButton->SetPosition((game->GetSettings()->screenWidth / 2) - (playSprite->GetScaleWidth() / 2),
+		400);
+	buttons.push_back(playButton);
+
+	Button* exitButton = new Button(exitSprite, "exit");
+	exitButton->SetPosition((game->GetSettings()->screenWidth / 2) - (exitSprite->GetScaleWidth() / 2),
+		250);
+	buttons.push_back(exitButton);
+
+	// Set play button into active button
+	currentButtonIndex = 0;
+	buttons[currentButtonIndex]->SetButtonState(Engine::ButtonState::HOVER);
+
+	// Create Text
+	text = (new Text("8-bit Arcade In.ttf", 100, game->GetDefaultTextShader()))
+		->SetText("Dino Game")->SetPosition(game->GetSettings()->screenWidth * 0.5f-200, game->GetSettings()->screenHeight - 100.0f)->SetColor(235, 229, 52);
+
+	// Add input mappings
+	game->GetInputManager()->AddInputMapping("next", SDLK_DOWN)
+		->AddInputMapping("prev", SDLK_UP)
+		->AddInputMapping("press", SDLK_RETURN);
+
+}
+```
+Ketika Tombol Play ditekan, kita akan memanggil Instance ScreenManager dan melakukan `SetCurrentScreen(“ingame”)` sehingga Screen yang ditampilkan berpindah ke Screen Ingame.
+
+Di bagian fungsi Update, kita menuliskan algoritma yang dapat alternating antara kedua Button yang ada, ketika tombol next (down arrow) maupun ketika tombol prev (up arrow) ditekan, sehingga salah satunya dapat play animation ketika terpilih.
+
+```cpp
+void Engine::DinoGUI::Update()
+{
+	// Set background
+	game->SetBackgroundColor(52, 155, 235);
+
+	if (game->GetInputManager()->IsKeyReleased("next")) {
+		// Set previous button to normal state
+		buttons[currentButtonIndex]->SetButtonState(Engine::ButtonState::NORMAL);
+		// Next Button
+		currentButtonIndex = (currentButtonIndex < (int)buttons.size() - 1) ? currentButtonIndex + 1 : currentButtonIndex;
+		// Set current button to hover state
+		buttons[currentButtonIndex]->SetButtonState(Engine::ButtonState::HOVER);
+	}
+
+	if (game->GetInputManager()->IsKeyReleased("prev")) {
+		// Set previous button to normal state
+		buttons[currentButtonIndex]->SetButtonState(Engine::ButtonState::NORMAL);
+		// Prev Button
+		currentButtonIndex = currentButtonIndex > 0 ? currentButtonIndex - 1 : currentButtonIndex;
+		// Set current button to hover state
+		buttons[currentButtonIndex]->SetButtonState(Engine::ButtonState::HOVER);
+	}
+
+	if (game->GetInputManager()->IsKeyReleased("press")) {
+		// Set current button to press state
+		Button* b = buttons[currentButtonIndex];
+		b->SetButtonState(Engine::ButtonState::PRESS);
+		// If play button then go to InGame, exit button then exit
+		if ("play" == b->GetButtonName()) {
+			ScreenManager::GetInstance(game)->SetCurrentScreen("ingame");
+		}
+		else if ("exit" == b->GetButtonName()) {
+			game->SetState(Engine::State::EXIT);
+		}
+	}
+
+	// Update All buttons
+	for (Button* b : buttons) {
+		b->Update(game->GetGameTime());
+	}
+}
+```
 3. ### Kelas Cactus.cpp
 
 4. ### Inisialisasi Ingame DinoDino.cpp
+
+Kita akan melakukan inisialisasi untuk Objek `sprite` yaitu Sprite Character utama yang akan kita kontrol ketika Game dijalankan. Setelah itu kita juga akan melakukan for loop untuk inisialisasi objek `cactus` dan menyimpannya di dalam vector `cacti`.
+
+Inisialisasi suatu sprite dimulai dengan menyiapkan Texture yang sesuai, biasa berbentuk *Sprite Sheet*
+
+Gambar
+
+Setelah itu kita akan Memasukkan Texture yang ada ke dalam Objek Sprite, dan mengatur berbagai atribut seperti `XNumFrames` dan `YNumFrames` yang membagi *SpriteSheet* yang kita punya menjadi kolom-kolom yang kemudian kita bisa gunakan ketika `AddAnimation`. Jangan lupa untuk mengatur Skala Sprite dan posisi awal mula Sprite.
+
+```cpp
+texture = new Texture("Chicken.png");
+//bikin sprite
+sprite = new Sprite(texture, game->GetDefaultSpriteShader(), game->GetDefaultQuad());
+//bikin animasi sprite
+sprite->SetNumXFrames(6)->SetNumYFrames(2)->AddAnimation("jump", 0, 5)->AddAnimation("walk", 6, 9)->SetScale(4)->SetAnimationDuration(50)->SetPosition(300, -10)->PlayAnim("walk");
+//bounding box sprite
+sprite->SetBoundingBoxSize(sprite->GetScaleWidth() - (16 * sprite->GetScale()), sprite->GetScaleHeight());
+``` 
+
+```cpp
+//init cactuses
+const int numCacti = 3;
+for (int i = 0; i < numCacti; ++i) {
+	Engine::Texture* cactusT = new Texture("cactus.png");
+	cactusS = new Sprite(cactusT, game->GetDefaultSpriteShader(), game->GetDefaultQuad());
+	
+	Cactus* cactus = new Cactus(cactusS);
+	cacti.push_back(cactus);
+}	
+```
+
+Kita juga harus menambahkan `InputManager` di dalam fungsi Init, di Game ini, kita cukup memiliki 1 jenis input yang kita beri nama “jump” yang dihubungkan dengan tombol Space dan Arrow Up
+
+```cpp
+game->GetInputManager()->AddInputMapping("jump", SDLK_SPACE)->AddInputMapping("jump", SDLK_UP);
+```
+
+Lalu juga kita akan menambahkan Text Score sehingga kita tahu score saat sedang berada di halaman Ingame.
+
+```cpp
+//text score
+score = 0;
+text = (new Text("8-bit Arcade In.ttf", 100, game->GetDefaultTextShader()))->SetText("score " + std::to_string(score))->SetPosition( 350, game->GetSettings()->screenHeight - 100.0f)->SetColor(0, 0, 0);
+```
 
 5. ### Update Ingame 
 
